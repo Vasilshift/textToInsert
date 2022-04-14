@@ -14,41 +14,85 @@ import java.util.List;
 @Component
 public class InsertText implements Runnable {
 
-    public static Float ttx;
-    public static Float tty;
+//    public static Float ttx;
+//    public static Float tty;
+//
+//    public static void setTtx(Float ttx) {
+//        InsertText.ttx = ttx;
+//    }
+//
+//    public static void setTty(Float tty) {
+//        InsertText.tty = tty;
+//    }
 
-    public static void setTtx(Float ttx) {
-        InsertText.ttx = ttx;
-    }
+    static final String JDBC_DRIVER = "org.h2.Driver";
+    static final String DB_URL = "jdbc:h2:~/test";
 
-    public static void setTty(Float tty) {
-        InsertText.tty = tty;
-    }
-
+    static final String USER = "sa";
+    static final String PASS = "";
 
     public void run() {
 
         try {
-
-            InsertText.insertText(ttx, tty);
-        } catch (IOException | SQLException e) {
+            InsertText.getDataFromDBAnd_InsertToDB();
+            //InsertText.insertText();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static void getDataFromDBAnd_InsertToDB() {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            System.out.println("Connected database from readFromDB successfully...");
+            stmt = conn.createStatement();
+            String sql = "SELECT id, strToFind, coorX, coorY FROM COORDINATES";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+
+                int id  = rs.getInt("id");
+                String str = rs.getString("strToFind");
+                float coorX = rs.getFloat("coorX");
+                float coorY = rs.getFloat("coorY");
+
+                System.out.print("ID: " + id);
+                System.out.print(", str: " + str);
+                System.out.print(", coorX: " + coorX);
+                System.out.println(", coorY: " + coorX);
+
+                InsertText.insertText(coorX, coorY);
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Finish!");
+    }
+
     public static void insertText(Float ttx, Float tty) throws IOException, SQLException {
 
-//        Connection conn = DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "password");
-//        Statement stmt = conn.createStatement();
-//        String sql = "select coorX from COORDINATES";
-//        ResultSet rs = stmt.executeQuery(sql);
-        //System.out.println("rs =  " + rs);
-//        while(rs.next()) {
-//            float ttx = rs.getFloat("coorX");
-//            float tty = rs.getFloat("coorY");
-//            System.out.println("x and y from while " + ttx + " " + tty);
-//        }
-//        rs.close();
+        System.out.println("ttx from insertText " + ttx + "  tty " + tty);
 
         File file = new File("C:/updatepdf/исходники/исходник1.pdf");
         PDDocument document = PDDocument.load(file);
@@ -58,13 +102,12 @@ public class InsertText implements Runnable {
 
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-        //System.out.println("x and y from insertText method " + InsertText.ttx + " " + InsertText.tty);
 
-        WorkWithDB.readFromDB();
+        //WorkWithDB.readFromDB();
 
         contentStream.newLineAtOffset(ttx, tty);
 
-        String text = "blablabla---===";
+        String text = "RA.RU.312849";
 
         contentStream.showText(text);
         contentStream.endText();

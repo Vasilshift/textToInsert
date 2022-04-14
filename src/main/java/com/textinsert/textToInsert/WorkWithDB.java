@@ -10,7 +10,7 @@ public class WorkWithDB {
     static final String USER = "sa";
     static final String PASS = "";
 
-    public static void connectToDB(float xDirAdj, float yEndAdj, String textToFind) throws SQLException, ClassNotFoundException {
+    public static void CreateTableAndInsertValueToDB(float xDirAdj, float yEndAdj, String textToFind) {
         Connection conn = null;
         Statement stmt1 = null;
         try {
@@ -33,8 +33,8 @@ public class WorkWithDB {
             myStmt.setString(1, textToFind);
             myStmt.setFloat(2, xDirAdj);
             myStmt.setFloat(3, yEndAdj);
-
             myStmt.executeUpdate();
+            System.out.println("coordinates are inserted!");
             stmt1.close();
             conn.close();
         } catch(SQLException se) {
@@ -55,58 +55,59 @@ public class WorkWithDB {
                 se.printStackTrace();
             }
         }
+        //WorkWithDB.readFromDB();
+
     }
 
-    public static void readFromDB() {
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-            Class.forName(JDBC_DRIVER);
-
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
-            stmt = conn.createStatement();
-            String sql = "SELECT id, strToFind, coorX, coorY FROM COORDINATES";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while(rs.next()) {
-
-                int id  = rs.getInt("id");
-                String age = rs.getString("strToFind");
-                float first = rs.getFloat("coorX");
-                float last = rs.getFloat("coorY");
-
-                System.out.print("ID: " + id);
-                System.out.print(", Age: " + age);
-                System.out.print(", First: " + first);
-                System.out.println(", Last: " + last);
-
-                InsertText.insertText(first, last);
-
-            }
-            rs.close();
-        } catch(SQLException se) {
-            // Handle errors for JDBC
-            se.printStackTrace();
-        } catch(Exception e) {
-            // Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            // finally block used to close resources
-            try {
-                if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
-            } // nothing we can do
-            try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se) {
-                se.printStackTrace();
-            } // end finally try
-        } // end try
-        System.out.println("Goodbye!");
-    }
+//    public static void readFromDB() {
+//        Connection conn = null;
+//        Statement stmt = null;
+//        try {
+//            Class.forName(JDBC_DRIVER);
+//
+//            System.out.println("Connecting to database...");
+//            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+//
+//            System.out.println("Connected database from readFromDB successfully...");
+//            stmt = conn.createStatement();
+//            String sql = "SELECT id, strToFind, coorX, coorY FROM COORDINATES";
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while(rs.next()) {
+//
+//                int id  = rs.getInt("id");
+//                String str = rs.getString("strToFind");
+//                float coorX = rs.getFloat("coorX");
+//                float coorY = rs.getFloat("coorY");
+//
+//                System.out.print("ID: " + id);
+//                System.out.print(", Age: " + str);
+//                System.out.print(", First: " + coorX);
+//                System.out.println(", Last: " + coorX);
+//
+//                InsertText.insertText(coorX, coorY);
+//
+//            }
+//            rs.close();
+//        } catch(SQLException se) {
+//            // Handle errors for JDBC
+//            se.printStackTrace();
+//        } catch(Exception e) {
+//            // Handle errors for Class.forName
+//            e.printStackTrace();
+//        } finally {
+//            // finally block used to close resources
+//            try {
+//                if(stmt!=null) stmt.close();
+//            } catch(SQLException se2) {
+//            } // nothing we can do
+//            try {
+//                if(conn!=null) conn.close();
+//            } catch(SQLException se) {
+//                se.printStackTrace();
+//            } // end finally try
+//        } // end try
+//        System.out.println("Goodbye!");
+//    }
 
 }

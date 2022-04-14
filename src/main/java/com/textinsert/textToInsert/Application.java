@@ -7,21 +7,20 @@ import java.io.IOException;
 import java.sql.*;
 
 @SpringBootApplication
-public class TextToInsertApplication {
+public class Application {
 
 	public static void main(String[] args) throws IOException, InterruptedException, SQLException {
-		SpringApplication.run(TextToInsertApplication.class, args);
+		SpringApplication.run(Application.class, args);
 
-
-
-		Thread thread = new Thread(new GetCoordinate());
+		Thread thread = new Thread(new GetAndSendCoordinate());
 		thread.start();
 
 		thread.join(4000);
 
-
 		Thread thread1 = new Thread(new InsertText());
+
 		thread1.start();
+
 	}
 
 }
