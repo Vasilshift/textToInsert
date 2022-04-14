@@ -14,20 +14,8 @@ import java.util.List;
 @Component
 public class InsertText implements Runnable {
 
-//    public static Float ttx;
-//    public static Float tty;
-//
-//    public static void setTtx(Float ttx) {
-//        InsertText.ttx = ttx;
-//    }
-//
-//    public static void setTty(Float tty) {
-//        InsertText.tty = tty;
-//    }
-
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test";
-
     static final String USER = "sa";
     static final String PASS = "";
 
@@ -35,7 +23,6 @@ public class InsertText implements Runnable {
 
         try {
             InsertText.getDataFromDBAnd_InsertToDB();
-            //InsertText.insertText();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,26 +35,28 @@ public class InsertText implements Runnable {
             Class.forName(JDBC_DRIVER);
 
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+
+            String sql = "SELECT strToFind, coorX, coorY, textForInsert FROM COORDINATES";
+            ResultSet rs = stmt.executeQuery(sql);
 
             System.out.println("Connected database from readFromDB successfully...");
-            stmt = conn.createStatement();
-            String sql = "SELECT id, strToFind, coorX, coorY FROM COORDINATES";
-            ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next()) {
 
-                int id  = rs.getInt("id");
+                //int id  = rs.getInt("id");
                 String str = rs.getString("strToFind");
                 float coorX = rs.getFloat("coorX");
                 float coorY = rs.getFloat("coorY");
+                String textIns = rs.getString("textForInsert");
 
-                System.out.print("ID: " + id);
-                System.out.print(", str: " + str);
+                System.out.print("str: " + str);
                 System.out.print(", coorX: " + coorX);
                 System.out.println(", coorY: " + coorX);
+                System.out.println(", textForInsert: " + textIns);
 
-                InsertText.insertText(coorX, coorY);
+                InsertText.insertText(coorX, coorY, textIns);
 
             }
             rs.close();
@@ -90,7 +79,7 @@ public class InsertText implements Runnable {
         System.out.println("Finish!");
     }
 
-    public static void insertText(Float ttx, Float tty) throws IOException, SQLException {
+    public static void insertText(Float ttx, Float tty, String textInsert) throws IOException, SQLException {
 
         System.out.println("ttx from insertText " + ttx + "  tty " + tty);
 
@@ -101,13 +90,13 @@ public class InsertText implements Runnable {
                 PDPageContentStream.AppendMode.APPEND, true, true);
 
         contentStream.beginText();
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+        contentStream.setFont(PDType1Font.COURIER, 12);
 
         //WorkWithDB.readFromDB();
 
         contentStream.newLineAtOffset(ttx, tty);
 
-        String text = "RA.RU.312849";
+        String text = textInsert;
 
         contentStream.showText(text);
         contentStream.endText();

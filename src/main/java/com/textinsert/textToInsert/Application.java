@@ -15,10 +15,9 @@ public class Application {
 		Thread thread = new Thread(new GetAndSendCoordinate());
 		thread.start();
 
-		thread.join(4000);
+		thread.join(6000);
 
 		Thread thread1 = new Thread(new InsertText());
-
 		thread1.start();
 
 	}
