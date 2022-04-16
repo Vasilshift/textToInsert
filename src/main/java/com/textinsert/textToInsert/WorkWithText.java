@@ -38,7 +38,7 @@ public class WorkWithText implements Runnable {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
 
-            String sql = "SELECT strToFind, coorX, coorY, textForInsert, id FROM COORDINATES";
+            String sql = "SELECT strToFind, coorX, coorY, textForInsert, id FROM COORDINATES WHERE id IN (1, 3, 4)";
             ResultSet rs = stmt.executeQuery(sql);
 
             System.out.println("Connected database from readFromDB successfully...");
