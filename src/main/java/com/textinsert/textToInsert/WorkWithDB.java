@@ -107,13 +107,15 @@ public class WorkWithDB {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt1 = conn.createStatement();
 
-            String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
-            PreparedStatement myStmt = conn.prepareStatement(query);
-
             String findId = "select id from COORDINATES";
             ResultSet resultSet = stmt1.executeQuery(findId);
 
-            int idC = resultSet.getInt("id");
+            System.out.println("resultSet.next()) " + resultSet.next());  // to need call 1 time this method !!!!!!!
+
+            String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
+            PreparedStatement myStmt = conn.prepareStatement(query);
+
+            long idC = resultSet.getLong("id");
             while (resultSet.next()) {
                 idC++;
             }
@@ -122,7 +124,7 @@ public class WorkWithDB {
             myStmt.setFloat(2, xAll);
             myStmt.setFloat(3, yAll);
             myStmt.setString(4, textToInsert);
-            myStmt.setInt(5, idC);
+            myStmt.setLong(5, idC);
 
             myStmt.executeUpdate();
             myStmt.close();
