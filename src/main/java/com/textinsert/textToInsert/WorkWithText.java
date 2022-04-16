@@ -50,7 +50,7 @@ public class WorkWithText implements Runnable {
                 String textIns = rs.getString("textForInsert");
                 int id  = rs.getInt("id");
 
-                System.out.print(" str: " + str);
+                System.out.print("str: " + str);
                 System.out.print(", coorX: " + coorX);
                 System.out.print(", coorY: " + coorX);
                 System.out.print(", textForInsert: " + textIns);
@@ -91,8 +91,6 @@ public class WorkWithText implements Runnable {
 
         contentStream.beginText();
         contentStream.setFont(PDType1Font.COURIER, 12);
-
-        //WorkWithDB.readFromDB();
 
         contentStream.newLineAtOffset(ttx, tty);
 

@@ -55,14 +55,12 @@ public class WorkWithDB {
 
     }
 
-
     public static void InsertValueToTable(String textAll, float xAll, float yAll,  String textToInsert) {
         Connection conn = null;
         Statement stmt1 = null;
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            //stmt1 = conn.createStatement();
 
             String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
             PreparedStatement myStmt = conn.prepareStatement(query);
@@ -74,7 +72,6 @@ public class WorkWithDB {
             myStmt.setInt(5, 1);
 
             myStmt.executeUpdate();
-
             myStmt.close();
             conn.close();
 
@@ -96,7 +93,6 @@ public class WorkWithDB {
                 se.printStackTrace();
             }
         }
-
     }
 
     public static void InsertValueToTableNext(String textAll, float xAll, float yAll,  String textToInsert) {
@@ -115,7 +111,7 @@ public class WorkWithDB {
             String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
             PreparedStatement myStmt = conn.prepareStatement(query);
 
-            long idC = resultSet.getLong("id");
+            long idC = resultSet.getLong("id") + 1;
             while (resultSet.next()) {
                 idC++;
             }
