@@ -17,7 +17,7 @@ public class Application {
 
 		thread.join(6000);
 
-		Thread thread1 = new Thread(new InsertText());
+		Thread thread1 = new Thread(new WorkWithText());
 		thread1.start();
 
 	}

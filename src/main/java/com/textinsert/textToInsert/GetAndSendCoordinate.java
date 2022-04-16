@@ -20,7 +20,7 @@ public class GetAndSendCoordinate extends PDFTextStripper implements Runnable {
     public static String forText2 = "Petrashev V.V.";
 
     public GetAndSendCoordinate() throws IOException {
-        WorkWithDB.createTable();
+
     }
 
     @Override
@@ -48,10 +48,7 @@ public class GetAndSendCoordinate extends PDFTextStripper implements Runnable {
             TextPosition textPosition = textPositions.get(string.length() - 7);
             float xDirAdj = textPosition.getXDirAdj();
             float yEndAdj = textPosition.getEndY();
-
-            System.out.println(xDirAdj);
-            System.out.println(yEndAdj);
-
+            WorkWithDB.createTable();
             WorkWithDB.InsertValueToTable(textToFind, xDirAdj, yEndAdj, forText);
         }
 
@@ -60,10 +57,7 @@ public class GetAndSendCoordinate extends PDFTextStripper implements Runnable {
             float xDirAdj1 = textPosition.getXDirAdj();
             float yEndAdj1 = textPosition.getEndY() + 12;
 
-            System.out.println("xDirAdj1 " + xDirAdj1);
-            System.out.println("yEndAdj1 " + yEndAdj1);
-
-            WorkWithDB.InsertValueToTable(textToFind1, xDirAdj1, yEndAdj1, forText1);
+            WorkWithDB.InsertValueToTableNext(textToFind1, xDirAdj1, yEndAdj1, forText1);
         }
 
         if (string.equalsIgnoreCase(textToFind2)) {
@@ -71,10 +65,7 @@ public class GetAndSendCoordinate extends PDFTextStripper implements Runnable {
             float xDirAdj2 = textPosition.getXDirAdj();
             float yEndAdj2 = textPosition.getEndY() + 12;
 
-            System.out.println("xDirAdj2 " + xDirAdj2);
-            System.out.println("yEndAdj2 " + yEndAdj2);
-
-            WorkWithDB.InsertValueToTable(textToFind2, xDirAdj2, yEndAdj2, forText2);
+            WorkWithDB.InsertValueToTableNext(textToFind2, xDirAdj2, yEndAdj2, forText2);
         }
 
     }

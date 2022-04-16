@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.List;
 
 @Component
-public class InsertText implements Runnable {
+public class WorkWithText implements Runnable {
 
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test";
@@ -22,7 +21,7 @@ public class InsertText implements Runnable {
     public void run() {
 
         try {
-            InsertText.getDataFromDBAnd_InsertToDB();
+            WorkWithText.getDataFromDBAnd_InsertToDB();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,28 +34,29 @@ public class InsertText implements Runnable {
             Class.forName(JDBC_DRIVER);
 
             System.out.println("Connecting to database...");
+
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
 
-            String sql = "SELECT strToFind, coorX, coorY, textForInsert FROM COORDINATES";
+            String sql = "SELECT strToFind, coorX, coorY, textForInsert, id FROM COORDINATES";
             ResultSet rs = stmt.executeQuery(sql);
 
             System.out.println("Connected database from readFromDB successfully...");
 
             while(rs.next()) {
-
-                //int id  = rs.getInt("id");
                 String str = rs.getString("strToFind");
                 float coorX = rs.getFloat("coorX");
                 float coorY = rs.getFloat("coorY");
                 String textIns = rs.getString("textForInsert");
+                int id  = rs.getInt("id");
 
-                System.out.print("str: " + str);
+                System.out.print(" str: " + str);
                 System.out.print(", coorX: " + coorX);
-                System.out.println(", coorY: " + coorX);
-                System.out.println(", textForInsert: " + textIns);
+                System.out.print(", coorY: " + coorX);
+                System.out.print(", textForInsert: " + textIns);
+                System.out.println(" id: " + id);
 
-                InsertText.insertText(coorX, coorY, textIns);
+                WorkWithText.insertTextToDocument(coorX, coorY, textIns);
 
             }
             rs.close();
@@ -79,7 +79,7 @@ public class InsertText implements Runnable {
         System.out.println("Finish!");
     }
 
-    public static void insertText(Float ttx, Float tty, String textInsert) throws IOException, SQLException {
+    public static void insertTextToDocument(Float ttx, Float tty, String textInsert) throws IOException, SQLException {
 
         System.out.println("ttx from insertText " + ttx + "  tty " + tty);
 
