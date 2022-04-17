@@ -1,13 +1,18 @@
 package com.textinsert.textToInsert;
 
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.sql.*;
 
-public class WorkWithDB {
+//@Service
+public class InsertCoordinatesToDB {
 
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test";
     static final String USER = "sa";
     static final String PASS = "";
+
 
     public static void createTable() {
         Connection conn = null;
@@ -22,6 +27,7 @@ public class WorkWithDB {
 
             String sqlCreateTable = "CREATE TABLE COORDINATES" +
                     " (" +
+                    "nameFile VARCHAR(255)," +
                     "strToFind VARCHAR(255), " +
                     "coorX FLOAT," +
                     "coorY FLOAT," +
@@ -30,7 +36,7 @@ public class WorkWithDB {
                     ")";
             stmt.executeUpdate(sqlCreateTable);
 
-            System.out.println("table is created ");
+            System.out.println("Table is created ");
 
             stmt.close();
             conn.close();
@@ -55,21 +61,22 @@ public class WorkWithDB {
 
     }
 
-    public static void InsertValueToTable(String textAll, float xAll, float yAll,  String textToInsert) {
+    public static void InsertValueToTable(String nameOfFile, String textAll, float xAll, float yAll,  String textToInsert) {
         Connection conn = null;
         Statement stmt1 = null;
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
+            String query = "insert into COORDINATES values (?, ?, ?, ?, ?, ?)";
             PreparedStatement myStmt = conn.prepareStatement(query);
 
-            myStmt.setString(1, textAll);
-            myStmt.setFloat(2, xAll);
-            myStmt.setFloat(3, yAll);
-            myStmt.setString(4, textToInsert);
-            myStmt.setInt(5, 1);
+            myStmt.setString(1, nameOfFile);
+            myStmt.setString(2, textAll);
+            myStmt.setFloat(3, xAll);
+            myStmt.setFloat(4, yAll);
+            myStmt.setString(5, textToInsert);
+            myStmt.setInt(6, 1);
 
             myStmt.executeUpdate();
             myStmt.close();
@@ -95,7 +102,7 @@ public class WorkWithDB {
         }
     }
 
-    public static void InsertValueToTableNext(String textAll, float xAll, float yAll,  String textToInsert) {
+    public static void InsertValueToTableNext(String nameOfFile, String textAll, float xAll, float yAll,  String textToInsert) {
         Connection conn = null;
         Statement stmt1 = null;
         try {
@@ -108,7 +115,7 @@ public class WorkWithDB {
 
             System.out.println("resultSet.next()) " + resultSet.next());  // to need call 1 time this method !!!!!!!
 
-            String query = "insert into COORDINATES values (?, ?, ?, ?, ?)";
+            String query = "insert into COORDINATES values (?, ?, ?, ?, ?, ?)";
             PreparedStatement myStmt = conn.prepareStatement(query);
 
             long idC = resultSet.getLong("id") + 1;
@@ -116,11 +123,12 @@ public class WorkWithDB {
                 idC++;
             }
 
-            myStmt.setString(1, textAll);
-            myStmt.setFloat(2, xAll);
-            myStmt.setFloat(3, yAll);
-            myStmt.setString(4, textToInsert);
-            myStmt.setLong(5, idC);
+            myStmt.setString(1, nameOfFile);
+            myStmt.setString(2, textAll);
+            myStmt.setFloat(3, xAll);
+            myStmt.setFloat(4, yAll);
+            myStmt.setString(5, textToInsert);
+            myStmt.setLong(6, idC);
 
             myStmt.executeUpdate();
             myStmt.close();
